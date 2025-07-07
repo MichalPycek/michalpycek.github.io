@@ -70,7 +70,7 @@ const Index = () => {
       {/* Hero Section */}
       <section 
         ref={heroRef}
-        className="min-h-screen flex items-center justify-center px-6 py-20 relative overflow-hidden"
+        className="h-screen flex items-center justify-center px-4 relative overflow-hidden"
       >
         {/* Subtle Background Grid */}
         <div className="absolute inset-0 opacity-[0.02]">
@@ -94,7 +94,7 @@ const Index = () => {
                 <img
                   src={profileImage}
                   alt="Michał Pycek"
-                  className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 object-cover rounded-2xl shadow-2xl border border-border/20"
+                  className="w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 object-cover rounded-2xl shadow-2xl border border-border/20"
                 />
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-background/20 to-transparent"></div>
               </div>
@@ -103,7 +103,7 @@ const Index = () => {
             {/* Content */}
             <div className="text-center lg:text-left order-1 lg:order-2 space-y-8">
               <div className="space-y-4">
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold font-sans tracking-tight leading-none">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold font-sans tracking-tight leading-tight">
                   <span className="text-foreground">Michał</span><br/>
                   <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Pycek</span>
                 </h1>
@@ -140,15 +140,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="py-8 px-6 border-t border-border/20">
-        <div className="container max-w-4xl mx-auto text-center">
-          <p className="text-muted-foreground font-mono text-sm">
-            © 2025 Michał Pycek. Future-facing tech. Human-centered design.
-          </p>
-        </div>
-      </footer>
     </div>
   );
 };

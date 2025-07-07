@@ -4,30 +4,12 @@ import profileImage from "@/assets/profile-image.jpg";
 
 const Index = () => {
   const heroRef = useRef<HTMLElement>(null);
-  const aboutRef = useRef<HTMLElement>(null);
-  const workRef = useRef<HTMLElement>(null);
-  const contactRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("animate-fade-in");
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    const refs = [heroRef, aboutRef, workRef, contactRef];
-    refs.forEach((ref) => {
-      if (ref.current) {
-        observer.observe(ref.current);
-      }
-    });
-
-    return () => observer.disconnect();
+    // Fade in animation on load
+    if (heroRef.current) {
+      heroRef.current.classList.add("animate-fade-in");
+    }
   }, []);
 
   const focusAreas = [
@@ -88,15 +70,15 @@ const Index = () => {
         
         <div className="container max-w-6xl mx-auto relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            {/* Profile Image - Square format */}
+            {/* Profile Image - Circular with elegant shadow */}
             <div className="flex justify-center lg:justify-end order-2 lg:order-1">
               <div className="relative">
                 <img
                   src={profileImage}
-                  alt="Michał Pycek"
-                  className="w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 object-cover rounded-2xl shadow-2xl border border-border/20"
+                  alt="Michał Pycek, Founder of Vemicon - AI-powered Salesforce solutions expert"
+                  className="w-40 h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 object-cover object-center rounded-full shadow-2xl border-2 border-primary/20 hover:shadow-primary/20 transition-all duration-500"
                 />
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-background/20 to-transparent"></div>
+                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/10 to-transparent opacity-60"></div>
               </div>
             </div>
             
@@ -118,7 +100,7 @@ const Index = () => {
                 </div>
               </div>
               
-              {/* Connect Links - Clean Grid */}
+              {/* Connect Links - Clean Grid with hover effects */}
               <div className="grid grid-cols-2 gap-3 max-w-sm mx-auto lg:mx-0">
                 {contactLinks.map((link, index) => (
                   <a
@@ -126,8 +108,8 @@ const Index = () => {
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-center justify-center space-x-2 bg-card/50 backdrop-blur-sm rounded-lg px-3 py-3 border border-border/30 
-                               hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:bg-card/70 hover:-translate-y-0.5"
+                    className="link-hover group flex items-center justify-center space-x-2 bg-card/60 backdrop-blur-sm rounded-lg px-3 py-3 border border-border/40 
+                               hover:border-primary/60 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 hover:bg-card/80 hover:-translate-y-0.5"
                   >
                     <link.icon className="w-4 h-4 text-primary group-hover:scale-110 transition-transform duration-300" />
                     <span className="text-xs font-mono text-muted-foreground group-hover:text-foreground transition-colors duration-300 truncate">

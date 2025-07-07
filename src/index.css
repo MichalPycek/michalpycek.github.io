@@ -32,58 +32,58 @@ All colors MUST be HSL.
   }
 
   .dark {
-    /* Primary dark theme colors */
-    --background: 222 84% 5%;
+    /* Primary dark theme colors with improved contrast */
+    --background: 222 84% 4%;
     --foreground: 210 40% 98%;
     
     /* Cards and surfaces */
-    --card: 224 47% 8%;
+    --card: 224 47% 9%;
     --card-foreground: 210 40% 98%;
     
     /* Popover */
-    --popover: 224 47% 8%;
+    --popover: 224 47% 9%;
     --popover-foreground: 210 40% 98%;
     
-    /* Primary accent (subtle blue) */
-    --primary: 217 91% 60%;
-    --primary-foreground: 222 84% 5%;
+    /* Primary accent with better contrast */
+    --primary: 217 91% 65%;
+    --primary-foreground: 222 84% 4%;
     
-    /* Secondary surfaces */
-    --secondary: 224 30% 12%;
+    /* Secondary surfaces with improved contrast */
+    --secondary: 224 30% 14%;
     --secondary-foreground: 210 40% 98%;
     
-    /* Muted elements */
-    --muted: 224 30% 12%;
-    --muted-foreground: 215 20% 65%;
+    /* Muted elements with better readability */
+    --muted: 224 30% 14%;
+    --muted-foreground: 215 20% 70%;
     
     /* Accent elements */
-    --accent: 224 30% 15%;
+    --accent: 224 30% 18%;
     --accent-foreground: 210 40% 98%;
     
     /* Destructive */
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
     
-    /* Borders and inputs */
-    --border: 224 30% 15%;
-    --input: 224 30% 15%;
-    --ring: 217 91% 60%;
+    /* Borders and inputs with better visibility */
+    --border: 224 30% 18%;
+    --input: 224 30% 18%;
+    --ring: 217 91% 65%;
 
     /* Custom design tokens */
-    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60% / 0.1), hsl(234 89% 74% / 0.1));
-    --gradient-surface: linear-gradient(180deg, hsl(224 47% 8%), hsl(222 84% 5%));
-    --shadow-glow: 0 0 40px hsl(217 91% 60% / 0.15);
-    --shadow-card: 0 8px 32px hsl(222 84% 5% / 0.3);
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 65% / 0.1), hsl(234 89% 74% / 0.1));
+    --gradient-surface: linear-gradient(180deg, hsl(224 47% 9%), hsl(222 84% 4%));
+    --shadow-glow: 0 0 40px hsl(217 91% 65% / 0.15);
+    --shadow-card: 0 8px 32px hsl(222 84% 4% / 0.3);
     
     /* Sidebar */
-    --sidebar-background: 224 47% 8%;
+    --sidebar-background: 224 47% 9%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 217 91% 60%;
-    --sidebar-primary-foreground: 222 84% 5%;
-    --sidebar-accent: 224 30% 12%;
+    --sidebar-primary: 217 91% 65%;
+    --sidebar-primary-foreground: 222 84% 4%;
+    --sidebar-accent: 224 30% 14%;
     --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 224 30% 15%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-border: 224 30% 18%;
+    --sidebar-ring: 217 91% 65%;
   }
 }
 
@@ -94,5 +94,21 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  /* Elegant hover underline effect */
+  .link-hover {
+    @apply relative transition-colors duration-300;
+  }
+  
+  .link-hover:after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-full h-0.5 bg-primary scale-x-0 origin-bottom-right transition-transform duration-300;
+  }
+  
+  .link-hover:hover:after {
+    @apply scale-x-100 origin-bottom-left;
   }
 }

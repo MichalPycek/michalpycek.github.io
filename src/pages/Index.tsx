@@ -71,79 +71,66 @@ const Index = () => {
       <section 
         ref={heroRef}
         className="min-h-screen flex items-center justify-center px-6 py-20 relative overflow-hidden"
-        style={{
-          background: "hsl(var(--gradient-surface))"
-        }}
       >
-        {/* Creative Background Elements */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-glow"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-accent/10 rounded-full blur-3xl animate-glow" style={{ animationDelay: "1s" }}></div>
-          <div className="absolute top-1/2 left-1/2 w-72 h-72 bg-primary/5 rounded-full blur-2xl animate-glow" style={{ animationDelay: "2s" }}></div>
-        </div>
-        
-        {/* Geometric Grid Pattern */}
-        <div className="absolute inset-0 opacity-5">
+        {/* Subtle Background Grid */}
+        <div className="absolute inset-0 opacity-[0.02]">
           <div className="h-full w-full" style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, hsl(var(--primary)) 1px, transparent 0)`,
-            backgroundSize: '40px 40px'
+            backgroundImage: `linear-gradient(hsl(var(--border)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--border)) 1px, transparent 1px)`,
+            backgroundSize: '32px 32px'
           }}></div>
         </div>
         
-        {/* Floating Elements */}
+        {/* Minimal floating elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-20 w-4 h-4 bg-primary/20 rounded-full animate-pulse" style={{ animationDelay: "0.5s" }}></div>
-          <div className="absolute top-40 right-32 w-3 h-3 bg-accent/30 rounded-full animate-pulse" style={{ animationDelay: "1.5s" }}></div>
-          <div className="absolute bottom-32 left-40 w-2 h-2 bg-primary/25 rounded-full animate-pulse" style={{ animationDelay: "2.5s" }}></div>
-          <div className="absolute bottom-20 right-20 w-5 h-5 bg-accent/15 rounded-full animate-pulse" style={{ animationDelay: "3s" }}></div>
+          <div className="absolute top-1/4 right-1/4 w-2 h-2 bg-primary/30 rounded-full animate-pulse" style={{ animationDelay: "2s" }}></div>
+          <div className="absolute bottom-1/3 left-1/4 w-1 h-1 bg-accent/40 rounded-full animate-pulse" style={{ animationDelay: "4s" }}></div>
         </div>
         
-        <div className="container max-w-4xl mx-auto relative z-10">
-          <div className="flex flex-col md:flex-row items-center md:items-start md:text-left text-center space-y-8 md:space-y-0 md:space-x-12">
-            {/* Profile Image - Left aligned */}
-            <div className="flex-shrink-0">
+        <div className="container max-w-6xl mx-auto relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            {/* Profile Image - Square format */}
+            <div className="flex justify-center lg:justify-end order-2 lg:order-1">
               <div className="relative">
                 <img
                   src={profileImage}
                   alt="Michał Pycek"
-                  className="w-32 h-32 md:w-48 md:h-48 rounded-full object-contain border-4 border-primary/20 shadow-2xl"
-                  style={{
-                    boxShadow: "hsl(var(--shadow-glow))"
-                  }}
+                  className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 object-cover rounded-2xl shadow-2xl border border-border/20"
                 />
-                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/10 to-accent/10 animate-pulse"></div>
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-background/20 to-transparent"></div>
               </div>
             </div>
             
             {/* Content */}
-            <div className="flex-1 space-y-6">
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold font-sans tracking-tight">
-                <span className="bg-gradient-to-r from-foreground via-primary to-accent bg-clip-text text-transparent">
-                  Michał Pycek
-                </span>
-              </h1>
+            <div className="text-center lg:text-left order-1 lg:order-2 space-y-8">
+              <div className="space-y-4">
+                <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold font-sans tracking-tight leading-none">
+                  <span className="text-foreground">Michał</span><br/>
+                  <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Pycek</span>
+                </h1>
+                
+                <div className="space-y-2">
+                  <p className="text-xl md:text-2xl text-muted-foreground font-mono">
+                    Founder of Vemicon
+                  </p>
+                  <p className="text-lg md:text-xl text-muted-foreground/80 leading-relaxed max-w-lg">
+                    Future-facing tech. Human-centered design.
+                  </p>
+                </div>
+              </div>
               
-              <p className="text-xl md:text-2xl text-muted-foreground font-mono font-light">
-                Founder of Vemicon
-              </p>
-              
-              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl">
-                Future-facing tech. Human-centered design.
-              </p>
-              
-              {/* Connect Links - Minimalist */}
-              <div className="flex flex-wrap gap-4 pt-6">
+              {/* Connect Links - Clean Grid */}
+              <div className="grid grid-cols-2 gap-3 max-w-sm mx-auto lg:mx-0">
                 {contactLinks.map((link, index) => (
                   <a
                     key={index}
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-center space-x-2 bg-card/30 backdrop-blur-sm rounded-lg px-4 py-2 border border-border/30 
-                               hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:bg-card/50"
+                    className="group flex items-center justify-center space-x-2 bg-card/50 backdrop-blur-sm rounded-lg px-3 py-3 border border-border/30 
+                               hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:bg-card/70 hover:-translate-y-0.5"
                   >
                     <link.icon className="w-4 h-4 text-primary group-hover:scale-110 transition-transform duration-300" />
-                    <span className="text-sm font-mono text-muted-foreground group-hover:text-foreground transition-colors duration-300">
+                    <span className="text-xs font-mono text-muted-foreground group-hover:text-foreground transition-colors duration-300 truncate">
                       {link.value}
                     </span>
                   </a>

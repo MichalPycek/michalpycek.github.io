@@ -75,136 +75,90 @@ const Index = () => {
           background: "hsl(var(--gradient-surface))"
         }}
       >
-        <div className="absolute inset-0 opacity-30">
+        {/* Creative Background Elements */}
+        <div className="absolute inset-0 opacity-20">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-glow"></div>
           <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-accent/10 rounded-full blur-3xl animate-glow" style={{ animationDelay: "1s" }}></div>
+          <div className="absolute top-1/2 left-1/2 w-72 h-72 bg-primary/5 rounded-full blur-2xl animate-glow" style={{ animationDelay: "2s" }}></div>
         </div>
         
-        <div className="container max-w-4xl mx-auto text-center relative z-10">
-          <div className="mb-8 flex justify-center">
-            <div className="relative">
-              <img
-                src={profileImage}
-                alt="Michał Pycek"
-                className="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-2 border-primary/20 shadow-2xl transform scale-75 origin-center"
-                style={{
-                  boxShadow: "hsl(var(--shadow-glow))"
-                }}
-              />
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/20 to-accent/20 animate-pulse"></div>
-            </div>
-          </div>
-          
-          <h1 className="text-5xl md:text-7xl font-bold mb-4 font-sans tracking-tight">
-            <span className="bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
-              Michał Pycek
-            </span>
-          </h1>
-          
-          <p className="text-xl md:text-2xl text-muted-foreground mb-6 font-mono font-light">
-            Founder of Vemicon
-          </p>
-          
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Future-facing tech. Human-centered design.
-          </p>
+        {/* Geometric Grid Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="h-full w-full" style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, hsl(var(--primary)) 1px, transparent 0)`,
+            backgroundSize: '40px 40px'
+          }}></div>
         </div>
-      </section>
-
-      {/* About Section */}
-      <section ref={aboutRef} className="py-20 px-6">
-        <div className="container max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center font-mono">
-            About Me
-          </h2>
-          
-          <div className="bg-card rounded-2xl p-8 md:p-12 border border-border/50 shadow-lg"
-               style={{ boxShadow: "hsl(var(--shadow-card))" }}>
-            <p className="text-lg leading-relaxed text-muted-foreground">
-              I design AI-powered Salesforce solutions that help businesses move faster and grow smarter. 
-              Passionate about automation, creative design, and impactful strategy, I focus on creating 
-              systems that bridge the gap between cutting-edge technology and meaningful human experiences.
-            </p>
-          </div>
+        
+        {/* Floating Elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-20 w-4 h-4 bg-primary/20 rounded-full animate-pulse" style={{ animationDelay: "0.5s" }}></div>
+          <div className="absolute top-40 right-32 w-3 h-3 bg-accent/30 rounded-full animate-pulse" style={{ animationDelay: "1.5s" }}></div>
+          <div className="absolute bottom-32 left-40 w-2 h-2 bg-primary/25 rounded-full animate-pulse" style={{ animationDelay: "2.5s" }}></div>
+          <div className="absolute bottom-20 right-20 w-5 h-5 bg-accent/15 rounded-full animate-pulse" style={{ animationDelay: "3s" }}></div>
         </div>
-      </section>
-
-      {/* What I Do Section */}
-      <section ref={workRef} className="py-20 px-6 bg-card/20">
-        <div className="container max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center font-mono">
-            What I Do
-          </h2>
-          
-          <div className="grid gap-6 md:gap-8">
-            {focusAreas.map((area, index) => (
-              <div
-                key={index}
-                className="group bg-card/50 backdrop-blur-sm rounded-xl p-6 border border-border/30 
-                           hover:border-primary/30 transition-all duration-300 hover:shadow-lg
-                           hover:bg-card/70 cursor-default"
-                style={{
-                  animationDelay: `${index * 0.1}s`
-                }}
-              >
-                <div className="flex items-center space-x-4">
-                  <div className="w-2 h-2 bg-primary rounded-full group-hover:scale-150 transition-transform duration-300"></div>
-                  <p className="text-lg font-medium text-foreground group-hover:text-primary transition-colors duration-300">
-                    {area}
-                  </p>
-                </div>
+        
+        <div className="container max-w-4xl mx-auto relative z-10">
+          <div className="flex flex-col md:flex-row items-center md:items-start md:text-left text-center space-y-8 md:space-y-0 md:space-x-12">
+            {/* Profile Image - Left aligned */}
+            <div className="flex-shrink-0">
+              <div className="relative">
+                <img
+                  src={profileImage}
+                  alt="Michał Pycek"
+                  className="w-32 h-32 md:w-48 md:h-48 rounded-full object-contain border-4 border-primary/20 shadow-2xl"
+                  style={{
+                    boxShadow: "hsl(var(--shadow-glow))"
+                  }}
+                />
+                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/10 to-accent/10 animate-pulse"></div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Connect Section */}
-      <section ref={contactRef} className="py-20 px-6">
-        <div className="container max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center font-mono">
-            Connect
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {contactLinks.map((link, index) => (
-              <a
-                key={index}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group bg-card rounded-xl p-6 border border-border/50 
-                           hover:border-primary/50 transition-all duration-300 hover:shadow-lg
-                           hover:bg-card/80 hover:-translate-y-1"
-                style={{
-                  animationDelay: `${index * 0.1}s`
-                }}
-              >
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center
-                                  group-hover:bg-primary/20 transition-colors duration-300">
-                    <link.icon className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="font-medium text-foreground group-hover:text-primary transition-colors duration-300">
-                      {link.label}
-                    </p>
-                    <p className="text-sm text-muted-foreground font-mono">
+            </div>
+            
+            {/* Content */}
+            <div className="flex-1 space-y-6">
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold font-sans tracking-tight">
+                <span className="bg-gradient-to-r from-foreground via-primary to-accent bg-clip-text text-transparent">
+                  Michał Pycek
+                </span>
+              </h1>
+              
+              <p className="text-xl md:text-2xl text-muted-foreground font-mono font-light">
+                Founder of Vemicon
+              </p>
+              
+              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl">
+                Future-facing tech. Human-centered design.
+              </p>
+              
+              {/* Connect Links - Minimalist */}
+              <div className="flex flex-wrap gap-4 pt-6">
+                {contactLinks.map((link, index) => (
+                  <a
+                    key={index}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center space-x-2 bg-card/30 backdrop-blur-sm rounded-lg px-4 py-2 border border-border/30 
+                               hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:bg-card/50"
+                  >
+                    <link.icon className="w-4 h-4 text-primary group-hover:scale-110 transition-transform duration-300" />
+                    <span className="text-sm font-mono text-muted-foreground group-hover:text-foreground transition-colors duration-300">
                       {link.value}
-                    </p>
-                  </div>
-                </div>
-              </a>
-            ))}
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-6 border-t border-border/30">
+      <footer className="py-8 px-6 border-t border-border/20">
         <div className="container max-w-4xl mx-auto text-center">
           <p className="text-muted-foreground font-mono text-sm">
-            © 2024 Michał Pycek. Future-facing tech. Human-centered design.
+            © 2025 Michał Pycek. Future-facing tech. Human-centered design.
           </p>
         </div>
       </footer>

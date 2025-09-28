@@ -52,8 +52,6 @@ const Index = () => {
       return;
     }
 
-    let frameId = 0;
-
     try {
       const root = getComputedStyle(document.documentElement);
       const accent = root.getPropertyValue("--primary").trim();
@@ -70,59 +68,6 @@ const Index = () => {
         console.warn("Failed to derive accent color for liquid glass", error);
       }
     }
-
-    const updatePanel = (xFraction: number, yFraction: number) => {
-      panel.style.setProperty("--lg-highlight-x", `${xFraction * 100}%`);
-      panel.style.setProperty("--lg-highlight-y", `${yFraction * 100}%`);
-      panel.style.setProperty(
-        "--lg-rotation-x",
-        `${(0.5 - yFraction) * 9.5}deg`
-      );
-      panel.style.setProperty(
-        "--lg-rotation-y",
-        `${(xFraction - 0.5) * 14}deg`
-      );
-      const glow =
-        0.18 +
-        Math.abs(xFraction - 0.5) * 0.4 +
-        Math.abs(yFraction - 0.5) * 0.35;
-      const glowValue = Math.min(glow, 0.85);
-      panel.style.setProperty("--lg-glow-opacity", glowValue.toFixed(3));
-    };
-
-    const queueUpdate = (x: number, y: number) => {
-      if (frameId) {
-        cancelAnimationFrame(frameId);
-      }
-
-      frameId = requestAnimationFrame(() => updatePanel(x, y));
-    };
-
-    const handlePointerMove = (event: PointerEvent) => {
-      const rect = panel.getBoundingClientRect();
-      const x = (event.clientX - rect.left) / rect.width;
-      const y = (event.clientY - rect.top) / rect.height;
-      const clampedX = Math.min(Math.max(x, 0), 1);
-      const clampedY = Math.min(Math.max(y, 0), 1);
-      queueUpdate(clampedX, clampedY);
-    };
-
-    const resetPanel = () => {
-      queueUpdate(0.5, 0.5);
-    };
-
-    resetPanel();
-
-    host.addEventListener("pointermove", handlePointerMove);
-    host.addEventListener("pointerleave", resetPanel);
-
-    return () => {
-      host.removeEventListener("pointermove", handlePointerMove);
-      host.removeEventListener("pointerleave", resetPanel);
-      if (frameId) {
-        cancelAnimationFrame(frameId);
-      }
-    };
   }, []);
 
   useEffect(() => {

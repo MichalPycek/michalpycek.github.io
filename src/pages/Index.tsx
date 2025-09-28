@@ -1,91 +1,324 @@
-import { useEffect, useRef } from "react";
-import { Github, Linkedin, Mail, Globe } from "lucide-react";
-import profileImage from "@/assets/profile-image.jpg";
+import { useEffect, useRef, type CSSProperties } from "react";
+import { ArrowUpRight, Linkedin, Mail, Globe, Github } from "lucide-react";
+import profileImage from "@/assets/profile-image.png";
 import ParticlesBackground from "@/components/ParticlesBackground";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+
+const heroStats = [
+  { value: "2014", label: "First Salesforce project" },
+  { value: "+15", label: "Salesforce certifications" },
+  { value: "2023", label: "First AI Agent on AppExchange" },
+];
+
+const contactLinks = [
+  {
+    icon: Globe,
+    label: "Website",
+    href: "https://vemicon.com",
+  },
+  {
+    icon: Mail,
+    label: "Email",
+    href: "mailto:michal.pycek@vemicon.com",
+  },
+  {
+    icon: Linkedin,
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/michalpycek/",
+  },
+  {
+    icon: Github,
+    label: "GitHub",
+    href: "https://github.com/michalpycek",
+  },
+];
 
 const Index = () => {
   const heroRef = useRef<HTMLElement>(null);
+  const heroPanelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (heroRef.current) {
       heroRef.current.classList.add("animate-fade-in");
+      heroRef.current.style.setProperty("--lg-parallax-value", "0px");
     }
   }, []);
 
-  const contactLinks = [
-    {
-      icon: Globe,
-      label: "Website",
-      href: "https://vemicon.com",
-      value: "vemicon.com",
-    },
-    {
-      icon: Mail,
-      label: "Email",
-      href: "mailto:contact@vemicon.com",
-      value: "contact@vemicon.com",
-    },
-    {
-      icon: Linkedin,
-      label: "LinkedIn",
-      href: "https://linkedin.com/in/michalpycek",
-      value: "in/michalpycek",
-    },
-    {
-      icon: Github,
-      label: "GitHub",
-      href: "https://github.com/michalpycek",
-      value: "michalpycek",
-    },
-  ];
+  useEffect(() => {
+    const panel = heroPanelRef.current;
+    const host = heroRef.current;
+
+    if (!panel || !host) {
+      return;
+    }
+
+    let frameId = 0;
+
+    try {
+      const root = getComputedStyle(document.documentElement);
+      const accent = root.getPropertyValue("--primary").trim();
+      if (accent) {
+        const accentColor = `hsl(${accent} / 0.45)`;
+        const accentSoft = `hsl(${accent} / 0.2)`;
+        host.style.setProperty("--lg-accent-color", accentColor);
+        host.style.setProperty("--lg-accent-soft", accentSoft);
+        panel.style.setProperty("--lg-accent-color", accentColor);
+        panel.style.setProperty("--lg-accent-soft", accentSoft);
+      }
+    } catch (error) {
+      if (import.meta.env.DEV) {
+        console.warn("Failed to derive accent color for liquid glass", error);
+      }
+    }
+
+    const updatePanel = (xFraction: number, yFraction: number) => {
+      panel.style.setProperty("--lg-highlight-x", `${xFraction * 100}%`);
+      panel.style.setProperty("--lg-highlight-y", `${yFraction * 100}%`);
+      panel.style.setProperty(
+        "--lg-rotation-x",
+        `${(0.5 - yFraction) * 9.5}deg`
+      );
+      panel.style.setProperty(
+        "--lg-rotation-y",
+        `${(xFraction - 0.5) * 14}deg`
+      );
+      const glow =
+        0.18 +
+        Math.abs(xFraction - 0.5) * 0.4 +
+        Math.abs(yFraction - 0.5) * 0.35;
+      const glowValue = Math.min(glow, 0.85);
+      panel.style.setProperty("--lg-glow-opacity", glowValue.toFixed(3));
+    };
+
+    const queueUpdate = (x: number, y: number) => {
+      if (frameId) {
+        cancelAnimationFrame(frameId);
+      }
+
+      frameId = requestAnimationFrame(() => updatePanel(x, y));
+    };
+
+    const handlePointerMove = (event: PointerEvent) => {
+      const rect = panel.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width;
+      const y = (event.clientY - rect.top) / rect.height;
+      const clampedX = Math.min(Math.max(x, 0), 1);
+      const clampedY = Math.min(Math.max(y, 0), 1);
+      queueUpdate(clampedX, clampedY);
+    };
+
+    const resetPanel = () => {
+      queueUpdate(0.5, 0.5);
+    };
+
+    resetPanel();
+
+    host.addEventListener("pointermove", handlePointerMove);
+    host.addEventListener("pointerleave", resetPanel);
+
+    return () => {
+      host.removeEventListener("pointermove", handlePointerMove);
+      host.removeEventListener("pointerleave", resetPanel);
+      if (frameId) {
+        cancelAnimationFrame(frameId);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const host = heroRef.current;
+    if (!host) {
+      return;
+    }
+
+    let ticking = false;
+
+    const updateParallax = () => {
+      ticking = false;
+      const depth = Math.min(window.scrollY, 600);
+      host.style.setProperty("--lg-parallax-value", `${depth * -0.08}px`);
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(updateParallax);
+      }
+    };
+
+    updateParallax();
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
-    <div className="min-h-screen bg-background text-foreground dark flex items-center justify-center px-4 relative overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden bg-[#030b1d] text-foreground">
       <ParticlesBackground />
-      <section ref={heroRef} className="container mx-auto py-12 relative z-10">
-        <div>
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr,auto] items-center gap-8 max-w-3xl mx-auto px-8">
-            {/* Profile Image */}
-            <div className="flex justify-center lg:justify-center lg:order-2 w-fit mx-auto">
-              <img
-                src={profileImage}
-                alt="Michał Pycek, Founder of Vemicon - AI-powered Salesforce solutions expert"
-                className="max-w-[200px] object-contain shadow-lg rounded-md"
-              />
-            </div>
+      <div
+        className="liquid-glass-layer pointer-events-none absolute inset-0 bg-[linear-gradient(122deg,#051329_0%,#092645_38%,#114262_68%,#0c2337_100%)] opacity-95"
+        style={{ "--lg-layer-depth": "0.05" } as CSSProperties}
+      />
+      <div
+        className="liquid-glass-layer pointer-events-none absolute inset-0 bg-[radial-gradient(105%_85%_at_14%_18%,rgba(122,214,255,0.42),transparent),radial-gradient(115%_90%_at_82%_20%,rgba(86,210,255,0.3),transparent),radial-gradient(160%_110%_at_58%_88%,rgba(58,120,255,0.28),transparent)] mix-blend-screen opacity-90"
+        style={{ "--lg-layer-depth": "0.18" } as CSSProperties}
+      />
+      <div
+        className="liquid-glass-layer pointer-events-none absolute inset-0 bg-[conic-gradient(from_210deg_at_72%_32%,rgba(255,255,255,0.28)_0deg,transparent_130deg,rgba(255,255,255,0.18)_240deg,transparent_360deg)] opacity-[0.6]"
+        style={{ "--lg-layer-depth": "0.32" } as CSSProperties}
+      />
 
-            {/* Content */}
-            <div className="text-center lg:text-left space-y-6 lg:order-first">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
-                Michał <span className="text-primary">Pycek</span>
-              </h1>
-              <p className="text-lg md:text-xl text-muted-foreground">
-                Salesforce Architect
-              </p>
-              <p className="text-base md:text-lg text-muted-foreground/80">
-                Crafting scalable systems that empower businesses.
-              </p>
+      <main className="relative z-10 pb-28">
+        <section
+          ref={heroRef}
+          className="pt-16"
+          style={{ "--lg-parallax-value": "0px" } as CSSProperties}
+        >
+          <div className="mx-auto flex max-w-6xl flex-col gap-12 px-6 sm:px-10 lg:px-12">
+            <div
+              ref={heroPanelRef}
+              className="liquid-glass-panel"
+              style={
+                {
+                  "--lg-highlight-x": "50%",
+                  "--lg-highlight-y": "50%",
+                  "--lg-rotation-x": "0deg",
+                  "--lg-rotation-y": "0deg",
+                  "--lg-glow-opacity": "0.24",
+                } as CSSProperties
+              }
+            >
+              <div className="liquid-glass-panel__shimmer" aria-hidden="true" />
+              <div className="liquid-glass-panel__rim" aria-hidden="true" />
+              <div className="relative grid gap-12 px-8 pb-14 pt-14 sm:px-12 lg:px-16 lg:grid-cols-[minmax(0,1.05fr),minmax(0,0.95fr)]">
+                <div className="flex flex-col gap-10 text-center text-slate-100 lg:text-left">
+                  <div className="space-y-5">
+                    <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.35em] text-sky-100/90">
+                      Salesforce Architect · Trusted Advisor
+                    </p>
+                    <h1 className="text-4xl font-semibold leading-tight tracking-tight text-white md:text-[3rem]">
+                      I lead Salesforce projects that scale smoothly and stay in
+                      control.
+                    </h1>
+                    <p className="mx-auto max-w-2xl text-base text-slate-100/80 md:text-lg lg:mx-0">
+                      I work with enterprise teams to align business strategy
+                      with Salesforce delivery, leading AI programmes,
+                      integration portfolios, and Lightning experience design so
+                      teams move fast and innovate effectively.
+                    </p>
+                  </div>
 
-              {/* Contact Links */}
-              <div className="contact-buttons flex lg:justify-start justify-center gap-3 mt-6">
-                {contactLinks.map((link, index) => (
-                  <a
-                    key={index}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title={link.label}
-                    aria-label={link.label}
-                    className="bg-card rounded-lg p-3 border border-border hover:border-primary transition-all duration-300"
-                  >
-                    <link.icon className="w-5 h-5 text-primary" />
-                  </a>
-                ))}
+                  <div className="flex flex-wrap justify-center gap-4 lg:justify-start">
+                    <a
+                      href="mailto:contact@vemicon.com"
+                      className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-primary shadow-lg shadow-sky-500/40 transition hover:translate-y-[-1px]"
+                    >
+                      Start a discovery call
+                    </a>
+                    <a
+                      href="https://vemicon.com/case-studies"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full border border-white/35 px-6 py-3 text-sm font-semibold text-white/85 transition hover:border-white/70 hover:bg-white/10"
+                    >
+                      Browse case studies
+                      <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                    </a>
+                  </div>
+
+                  <div className="liquid-glass-slab px-7 py-8">
+                    <div
+                      className="liquid-glass-slab__ambient"
+                      aria-hidden="true"
+                    />
+                    <div className="relative grid gap-6 sm:grid-cols-3">
+                      {heroStats.map((stat, index) => (
+                        <div
+                          key={index}
+                          className="liquid-glass-stat flex min-w-0 flex-col items-center justify-start gap-1.5 px-3 py-2 text-center transition duration-200 sm:px-6"
+                        >
+                          <span className="text-3xl font-semibold leading-none tracking-tight text-white sm:text-[2.6rem]">
+                            {stat.value}
+                          </span>
+                          <span className="text-[11px] uppercase tracking-[0.2em] text-white/65 leading-[1.4]">
+                            {stat.label}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="relative flex justify-center">
+                  <div className="relative flex w-full max-w-md flex-col items-center gap-7">
+                    <div className="liquid-glass-orb" aria-hidden="true" />
+                    <div
+                      className="liquid-glass-orb liquid-glass-orb--top"
+                      aria-hidden="true"
+                    />
+                    <div
+                      className="liquid-glass-orb liquid-glass-orb--bottom"
+                      aria-hidden="true"
+                    />
+                    <div className="liquid-glass-card">
+                      <div
+                        className="liquid-glass-card__highlight"
+                        aria-hidden="true"
+                      />
+                      <div
+                        className="liquid-glass-card__rim"
+                        aria-hidden="true"
+                      />
+                      <div
+                        className="liquid-glass-card__flare"
+                        aria-hidden="true"
+                      />
+                      <AspectRatio ratio={4 / 5}>
+                        <img
+                          src={profileImage}
+                          alt="Michał Pycek, Salesforce Architect"
+                          className="h-full w-full rounded-[3.25rem] object-cover object-[center_12%] opacity-95 [filter:saturate(1.05)_contrast(1.04)_brightness(1.02)]"
+                          loading="eager"
+                          decoding="async"
+                          sizes="(min-width: 1280px) 20rem, (min-width: 1024px) 18rem, (min-width: 768px) 16rem, 14rem"
+                        />
+                      </AspectRatio>
+                    </div>
+                    <div className="flex w-full flex-col items-center gap-3 text-center">
+                      <p className="text-sm uppercase tracking-[0.25em] text-white/55">
+                        Let's connect
+                      </p>
+                      <div className="liquid-glass-contact">
+                        {contactLinks.map((link, index) => (
+                          <a
+                            key={index}
+                            href={link.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={link.label}
+                            aria-label={link.label}
+                            className="liquid-icon-button"
+                          >
+                            <span className="liquid-icon">
+                              <link.icon
+                                className="h-5 w-5"
+                                aria-hidden="true"
+                              />
+                            </span>
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
     </div>
   );
 };

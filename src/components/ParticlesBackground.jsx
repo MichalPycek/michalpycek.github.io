@@ -7,7 +7,7 @@ const ParticlesBackground = () => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     let particles = [];
-    const numParticles = 50;
+    const numParticles = 70;
 
     // Set canvas size
     canvas.width = window.innerWidth;
@@ -32,7 +32,7 @@ const ParticlesBackground = () => {
         if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
       }
       draw() {
-        ctx.fillStyle = "rgba(75, 94, 138, 0.3)";
+        ctx.fillStyle = "rgba(1, 118, 211, 0.18)";
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
@@ -73,7 +73,7 @@ const ParticlesBackground = () => {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 z-0"
-      style={{ backgroundColor: "#111827" }}
+      style={{ backgroundColor: "transparent" }}
     />
   );
 };

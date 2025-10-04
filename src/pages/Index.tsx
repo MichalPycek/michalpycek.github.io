@@ -19,7 +19,7 @@ const contactLinks = [
   {
     icon: Mail,
     label: "Email",
-    href: "mailto:michal.pycek@vemicon.com",
+    href: "mailto:michalpycek@gmail.com",
   },
   {
     icon: Linkedin,

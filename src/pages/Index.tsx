@@ -159,6 +159,8 @@ const Index = () => {
                   <div className="flex flex-wrap justify-center gap-4 lg:justify-start">
                     <a
                       href="https://calendar.app.google/PnDkzsEt1s1MHmn2A"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-primary shadow-lg shadow-sky-500/40 transition hover:translate-y-[-1px]"
                     >
                       Start a discovery call

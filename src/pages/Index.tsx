@@ -166,12 +166,12 @@ const Index = () => {
                       Start a discovery call
                     </a>
                     <a
-                      href="https://vemicon.com/case-studies"
+                      href="https://trailblazer.me/id/mpycek"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 rounded-full border border-white/35 px-6 py-3 text-sm font-semibold text-white/85 transition hover:border-white/70 hover:bg-white/10"
                     >
-                      Browse case studies
+                      View my Trailhead profile
                       <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
                     </a>
                   </div>

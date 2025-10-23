@@ -101,18 +101,18 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#030b1d] text-foreground">
+    <div className="relative min-h-screen overflow-hidden bg-[#010314] text-foreground">
       <ParticlesBackground />
       <div
-        className="liquid-glass-layer pointer-events-none absolute inset-0 bg-[linear-gradient(122deg,#051329_0%,#092645_38%,#114262_68%,#0c2337_100%)] opacity-95"
+        className="liquid-glass-layer pointer-events-none absolute inset-0 bg-[linear-gradient(122deg,#020915_0%,#071b33_38%,#0c2843_68%,#071c2f_100%)] opacity-95"
         style={{ "--lg-layer-depth": "0.05" } as CSSProperties}
       />
       <div
-        className="liquid-glass-layer pointer-events-none absolute inset-0 bg-[radial-gradient(105%_85%_at_14%_18%,rgba(122,214,255,0.42),transparent),radial-gradient(115%_90%_at_82%_20%,rgba(86,210,255,0.3),transparent),radial-gradient(160%_110%_at_58%_88%,rgba(58,120,255,0.28),transparent)] mix-blend-screen opacity-90"
+        className="liquid-glass-layer pointer-events-none absolute inset-0 bg-[radial-gradient(105%_85%_at_14%_18%,rgba(98,182,236,0.28),transparent),radial-gradient(115%_90%_at_82%_20%,rgba(74,168,226,0.22),transparent),radial-gradient(160%_110%_at_58%_88%,rgba(46,104,212,0.2),transparent)] mix-blend-screen opacity-90"
         style={{ "--lg-layer-depth": "0.18" } as CSSProperties}
       />
       <div
-        className="liquid-glass-layer pointer-events-none absolute inset-0 bg-[conic-gradient(from_210deg_at_72%_32%,rgba(255,255,255,0.28)_0deg,transparent_130deg,rgba(255,255,255,0.18)_240deg,transparent_360deg)] opacity-[0.6]"
+        className="liquid-glass-layer pointer-events-none absolute inset-0 bg-[conic-gradient(from_210deg_at_72%_32%,rgba(255,255,255,0.18)_0deg,transparent_130deg,rgba(255,255,255,0.12)_240deg,transparent_360deg)] opacity-[0.6]"
         style={{ "--lg-layer-depth": "0.32" } as CSSProperties}
       />
 
@@ -142,7 +142,7 @@ const Index = () => {
                 <div className="flex flex-col gap-10 text-center text-slate-100 lg:text-left">
                   <div className="space-y-5">
                     <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.35em] text-sky-100/90">
-                      Salesforce Architect · Trusted Advisor
+                      Salesforce Architect
                     </p>
                     <h1 className="text-4xl font-semibold leading-tight tracking-tight text-white md:text-[3rem]">
                       I lead Salesforce projects that scale smoothly and stay in
@@ -163,7 +163,7 @@ const Index = () => {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-primary shadow-lg shadow-sky-500/40 transition hover:translate-y-[-1px]"
                     >
-                      Start a discovery call
+                      Schedule a call
                     </a>
                     <a
                       href="https://trailblazer.me/id/mpycek"

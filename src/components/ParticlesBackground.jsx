@@ -39,31 +39,51 @@ const ParticlesBackground = () => {
     cloudCtx.lineWidth = 0.5;
     cloudCtx.stroke(cloudPath);
 
-    // Setup
-    const resize = () => {
-      const dpr = window.devicePixelRatio || 1;
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-      canvas.style.width = `${width}px`;
-      canvas.style.height = `${height}px`;
-      ctx.scale(dpr, dpr);
-      
-      // Reset particles when resizing
-      particles.length = 0;
-      for (let i = 0; i < 40; i++) { // Reduced count for clouds
-        particles.push({
+    // Create initial particles
+    const createParticles = (width, height) => {
+      const newParticles = [];
+      for (let i = 0; i < 40; i++) {
+        newParticles.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          size: Math.random() * 0.5 + 0.4, // Slightly larger size
-          rotation: (Math.random() - 0.5) * 0.2, // Limit rotation to ±0.1π radians (about ±18 degrees)
-          vx: (Math.random() - 0.5) * 0.3, // Slower movement for clouds
+          size: Math.random() * 0.5 + 0.4,
+          rotation: (Math.random() - 0.5) * 0.2,
+          vx: (Math.random() - 0.5) * 0.3,
           vy: (Math.random() - 0.5) * 0.3,
-          opacity: 0.4 + Math.random() * 0.3 // Increased opacity range (0.4 to 0.7)
+          opacity: 0.4 + Math.random() * 0.3
         });
       }
+      return newParticles;
+    };
+
+    // Setup with debounced resize
+    let resizeTimeout;
+    const resize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        const dpr = window.devicePixelRatio || 1;
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        const oldWidth = canvas.width / dpr;
+        const oldHeight = canvas.height / dpr;
+        
+        // Update canvas size
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+        ctx.scale(dpr, dpr);
+
+        // Adjust existing particle positions to new dimensions
+        if (particles.length === 0) {
+          particles.push(...createParticles(width, height));
+        } else {
+          particles.forEach(p => {
+            p.x = (p.x / oldWidth) * width;
+            p.y = (p.y / oldHeight) * height;
+          });
+        }
+      }, 250); // Debounce delay
     };
 
     // Animation
@@ -98,11 +118,28 @@ const ParticlesBackground = () => {
 
       // Batch similar operations
     // Initialize
-    resize();
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const dpr = window.devicePixelRatio || 1;
+    
+    // Initial canvas setup
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+    ctx.scale(dpr, dpr);
+
+    // Create initial particles
+    particles.push(...createParticles(width, height));
     animate();
 
     // Event listeners
     window.addEventListener("resize", resize);
+
+    // Prevent mobile pull-to-refresh and other touch interactions
+    canvas.addEventListener("touchmove", (e) => {
+      e.preventDefault();
+    }, { passive: false });
 
     // Cleanup
     return () => {

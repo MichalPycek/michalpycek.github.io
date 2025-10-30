@@ -1,114 +1,175 @@
 import { useEffect, useRef } from "react";
 
+const MIN_PARTICLES = 36;
+const MAX_PARTICLES = 120;
+const PARTICLE_DENSITY = 0.00003;
+
 const ParticlesBackground = () => {
   const canvasRef = useRef(null);
   const animationRef = useRef(null);
+  const resizeTimeoutRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    if (!canvas) {
+      return;
+    }
+
     const ctx = canvas.getContext("2d", { alpha: true });
+    if (!ctx) {
+      return;
+    }
+
     ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = 'high';
+    ctx.imageSmoothingQuality = "high";
+
     const particles = [];
-    
-    // Salesforce cloud path (simplified)
-    const cloudPath = new Path2D("M25.5 12.5c-.7-3.4-3.7-6-7.4-6-2.5 0-4.8 1.2-6.2 3.1-1-.7-2.2-1.1-3.4-1.1-3.3 0-6 2.7-6 6 0 .3 0 .7.1 1-2.1 1.1-3.6 3.2-3.6 5.7 0 3.5 2.9 6.4 6.4 6.4h19.2c3.5 0 6.4-2.9 6.4-6.4 0-3.1-2.1-5.6-4.8-6.3");
-    
-    // Pre-render cloud to an offscreen canvas for better performance
-    const cloudCanvas = document.createElement('canvas');
-    const cloudSize = 30; // Base size for the cloud
+
+    const cloudPath = new Path2D(
+      "M25.5 12.5c-.7-3.4-3.7-6-7.4-6-2.5 0-4.8 1.2-6.2 3.1-1-.7-2.2-1.1-3.4-1.1-3.3 0-6 2.7-6 6 0 .3 0 .7.1 1-2.1 1.1-3.6 3.2-3.6 5.7 0 3.5 2.9 6.4 6.4 6.4h19.2c3.5 0 6.4-2.9 6.4-6.4 0-3.1-2.1-5.6-4.8-6.3"
+    );
+
+    const cloudCanvas = document.createElement("canvas");
+    const cloudSize = 30;
     cloudCanvas.width = cloudSize;
     cloudCanvas.height = cloudSize;
-    const cloudCtx = cloudCanvas.getContext('2d', { alpha: true });
-    
-    // Enable crisp rendering
+    const cloudCtx = cloudCanvas.getContext("2d", { alpha: true });
+
+    if (!cloudCtx) {
+      return;
+    }
+
     cloudCtx.imageSmoothingEnabled = true;
-    cloudCtx.imageSmoothingQuality = 'high';
-    
-    // Scale and center the cloud path
-    cloudCtx.translate(cloudSize/2, cloudSize/2);
-    cloudCtx.scale(0.8, 0.8); // Scale to fit
-    cloudCtx.translate(-15, -15); // Center the path
-    
-    // Draw the cloud with Salesforce blue
-    cloudCtx.fillStyle = "#00A1E0"; // Salesforce blue
+    cloudCtx.imageSmoothingQuality = "high";
+    cloudCtx.translate(cloudSize / 2, cloudSize / 2);
+    cloudCtx.scale(0.8, 0.8);
+    cloudCtx.translate(-15, -15);
+    cloudCtx.fillStyle = "#00A1E0";
     cloudCtx.fill(cloudPath);
-    
-    // Add subtle highlight for better definition
     cloudCtx.strokeStyle = "#1AB0EE";
     cloudCtx.lineWidth = 0.5;
     cloudCtx.stroke(cloudPath);
 
-    // Create initial particles
-    const createParticles = (width, height) => {
+    let layoutWidth = 0;
+    let layoutHeight = 0;
+    let deviceRatio = window.devicePixelRatio || 1;
+
+    const computeParticleCount = (width, height) => {
+      const target = Math.round(width * height * PARTICLE_DENSITY);
+      return Math.max(MIN_PARTICLES, Math.min(MAX_PARTICLES, target));
+    };
+
+    const createParticle = (width, height) => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      size: Math.random() * 0.5 + 0.4,
+      rotation: (Math.random() - 0.5) * 0.2,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      opacity: 0.4 + Math.random() * 0.3,
+    });
+
+    const createParticles = (width, height, count) => {
       const newParticles = [];
-      for (let i = 0; i < 40; i++) {
-        newParticles.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          size: Math.random() * 0.5 + 0.4,
-          rotation: (Math.random() - 0.5) * 0.2,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: (Math.random() - 0.5) * 0.3,
-          opacity: 0.4 + Math.random() * 0.3
-        });
+      for (let i = 0; i < count; i += 1) {
+        newParticles.push(createParticle(width, height));
       }
       return newParticles;
     };
 
-    // Setup with debounced resize
-    let resizeTimeout;
-    const resize = () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        const dpr = window.devicePixelRatio || 1;
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-        const oldWidth = canvas.width / dpr;
-        const oldHeight = canvas.height / dpr;
-        
-        // Update canvas size
-        canvas.width = width * dpr;
-        canvas.height = height * dpr;
-        canvas.style.width = `${width}px`;
-        canvas.style.height = `${height}px`;
-        ctx.scale(dpr, dpr);
+    const adjustParticleCount = (targetCount, width, height) => {
+      if (particles.length < targetCount) {
+        particles.push(
+          ...createParticles(width, height, targetCount - particles.length)
+        );
+        return;
+      }
 
-        // Adjust existing particle positions to new dimensions
-        if (particles.length === 0) {
-          particles.push(...createParticles(width, height));
-        } else {
-          particles.forEach(p => {
-            p.x = (p.x / oldWidth) * width;
-            p.y = (p.y / oldHeight) * height;
-          });
-        }
-      }, 250); // Debounce delay
+      if (particles.length > targetCount) {
+        particles.length = targetCount;
+      }
     };
 
-    // Animation
+    const applyCanvasSize = (width, height, dpr) => {
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, width, height);
+    };
+
+    const getCanvasDimensions = () => {
+      const parent = canvas.parentElement;
+      const width =
+        parent?.clientWidth ?? document.documentElement.clientWidth ?? window.innerWidth;
+      const height = Math.max(
+        parent?.scrollHeight ?? 0,
+        parent?.clientHeight ?? 0,
+        document.documentElement.scrollHeight,
+        document.documentElement.clientHeight,
+        document.body?.scrollHeight ?? 0,
+        window.innerHeight
+      );
+      return { width, height };
+    };
+
+    const updateLayout = () => {
+      const { width, height } = getCanvasDimensions();
+      const dpr = window.devicePixelRatio || 1;
+
+      const widthChanged = width !== layoutWidth;
+      const heightChanged = height !== layoutHeight;
+      const dprChanged = Math.abs(dpr - deviceRatio) > 0.01;
+
+      if (!widthChanged && !heightChanged && !dprChanged) {
+        return;
+      }
+
+      const prevWidth = layoutWidth || width;
+      const prevHeight = layoutHeight || height;
+
+      layoutWidth = width;
+      layoutHeight = height;
+      deviceRatio = dpr;
+
+      applyCanvasSize(width, height, dpr);
+
+      if (widthChanged || heightChanged) {
+        particles.forEach((particle) => {
+          particle.x = (particle.x / prevWidth) * width;
+          particle.y = (particle.y / prevHeight) * height;
+        });
+      }
+
+      const targetCount = computeParticleCount(width, height);
+      adjustParticleCount(targetCount, width, height);
+    };
+
+    const scheduleResize = () => {
+      if (resizeTimeoutRef.current) {
+        clearTimeout(resizeTimeoutRef.current);
+      }
+      resizeTimeoutRef.current = setTimeout(updateLayout, 150);
+    };
+
     const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const width = window.innerWidth;
-      const height = window.innerHeight;
+      ctx.clearRect(0, 0, layoutWidth, layoutHeight);
 
-      particles.forEach(p => {
-        // Update
-        p.x += p.vx;
-        p.y += p.vy;
+      particles.forEach((particle) => {
+        particle.x += particle.vx;
+        particle.y += particle.vy;
 
-        // Wrap around screen
-        if (p.x < -30) p.x = width + 30;
-        if (p.x > width + 30) p.x = -30;
-        if (p.y < -30) p.y = height + 30;
-        if (p.y > height + 30) p.y = -30;
+        if (particle.x < -30) particle.x = layoutWidth + 30;
+        if (particle.x > layoutWidth + 30) particle.x = -30;
+        if (particle.y < -30) particle.y = layoutHeight + 30;
+        if (particle.y > layoutHeight + 30) particle.y = -30;
 
-        // Draw cloud
         ctx.save();
-        ctx.translate(p.x, p.y);
-        ctx.rotate(p.rotation);
-        ctx.scale(p.size, p.size);
-        ctx.globalAlpha = p.opacity;
+        ctx.translate(particle.x, particle.y);
+        ctx.rotate(particle.rotation);
+        ctx.scale(particle.size, particle.size);
+        ctx.globalAlpha = particle.opacity;
         ctx.drawImage(cloudCanvas, -15, -15);
         ctx.restore();
       });
@@ -116,34 +177,31 @@ const ParticlesBackground = () => {
       animationRef.current = requestAnimationFrame(animate);
     };
 
-      // Batch similar operations
-    // Initialize
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    const dpr = window.devicePixelRatio || 1;
-    
-    // Initial canvas setup
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
-    ctx.scale(dpr, dpr);
-
-    // Create initial particles
-    particles.push(...createParticles(width, height));
+    updateLayout();
     animate();
 
-    // Event listeners
-    window.addEventListener("resize", resize);
+    const resizeListener = () => scheduleResize();
+    window.addEventListener("resize", resizeListener, { passive: true });
+    window.addEventListener("orientationchange", resizeListener);
 
-    // Prevent mobile pull-to-refresh and other touch interactions
-    canvas.addEventListener("touchmove", (e) => {
-      e.preventDefault();
-    }, { passive: false });
+    let resizeObserver;
+    if (window.ResizeObserver) {
+      const parent = canvas.parentElement || document.body;
+      resizeObserver = new ResizeObserver(() => scheduleResize());
+      if (parent) {
+        resizeObserver.observe(parent);
+      }
+    }
 
-    // Cleanup
     return () => {
-      window.removeEventListener("resize", resize);
+      window.removeEventListener("resize", resizeListener);
+      window.removeEventListener("orientationchange", resizeListener);
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
+      if (resizeTimeoutRef.current) {
+        clearTimeout(resizeTimeoutRef.current);
+      }
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
@@ -153,7 +211,7 @@ const ParticlesBackground = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 z-0"
+      className="pointer-events-none absolute inset-0 z-0"
       style={{ backgroundColor: "transparent" }}
     />
   );

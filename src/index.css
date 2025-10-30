@@ -106,20 +106,6 @@ All colors MUST be HSL.
 }
 
 @layer components {
-  /* Elegant hover underline effect */
-  .link-hover {
-    @apply relative transition-colors duration-300;
-  }
-
-  .link-hover:after {
-    content: "";
-    @apply absolute bottom-0 left-0 w-full h-0.5 bg-primary scale-x-0 origin-bottom-right transition-transform duration-300;
-  }
-
-  .link-hover:hover:after {
-    @apply scale-x-100 origin-bottom-left;
-  }
-
   .liquid-glass-layer {
     transform: translate3d(
       0,

@@ -2,7 +2,7 @@ import { useEffect, useRef, type CSSProperties } from "react";
 import { ArrowUpRight, Linkedin, Mail, Globe, Github } from "lucide-react";
 import profileImage from "@/assets/profile-image.png";
 import ParticlesBackground from "@/components/ParticlesBackground";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
+import AspectRatio from "@/components/AspectRatio";
 
 const heroStats = [
   { value: "2014", label: "First Salesforce project" },

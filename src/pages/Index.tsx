@@ -234,7 +234,7 @@ const Index = () => {
                             loading="eager"
                             decoding="async"
                             fetchPriority="high"
-                            sizes="(min-width: 1280px) 20rem, (min-width: 1024px) 18rem, (min-width: 768px) 16rem, 14rem"
+                            sizes="(max-width: 640px) 224px, (max-width: 768px) 256px, (max-width: 1024px) 288px, (max-width: 1280px) 288px, 320px"
                           />
                         </picture>
                       </AspectRatio>

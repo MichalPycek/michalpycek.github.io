@@ -1,6 +1,7 @@
 import { useEffect, useRef, type CSSProperties } from "react";
 import { ArrowUpRight, Linkedin, Mail, Globe, Github } from "lucide-react";
-import profileImage from "@/assets/profile-image.png";
+import profileImageWebp from "@/assets/profile-image.webp";
+import profileImagePng from "@/assets/profile-image.png";
 import ParticlesBackground from "@/components/ParticlesBackground";
 import AspectRatio from "@/components/AspectRatio";
 
@@ -224,14 +225,18 @@ const Index = () => {
                         aria-hidden="true"
                       />
                       <AspectRatio ratio={4 / 5}>
-                        <img
-                          src={profileImage}
-                          alt="Michał Pycek, Salesforce Architect"
-                          className="h-full w-full rounded-[3.25rem] object-cover object-[center_12%] opacity-95 [filter:saturate(1.05)_contrast(1.04)_brightness(1.02)]"
-                          loading="eager"
-                          decoding="async"
-                          sizes="(min-width: 1280px) 20rem, (min-width: 1024px) 18rem, (min-width: 768px) 16rem, 14rem"
-                        />
+                        <picture>
+                          <source srcSet={profileImageWebp} type="image/webp" />
+                          <img
+                            src={profileImagePng}
+                            alt="Michał Pycek, Salesforce Architect"
+                            className="h-full w-full rounded-[3.25rem] object-cover object-[center_12%] opacity-95 [filter:saturate(1.05)_contrast(1.04)_brightness(1.02)]"
+                            loading="eager"
+                            decoding="async"
+                            fetchPriority="high"
+                            sizes="(min-width: 1280px) 20rem, (min-width: 1024px) 18rem, (min-width: 768px) 16rem, 14rem"
+                          />
+                        </picture>
                       </AspectRatio>
                     </div>
                     <div className="flex w-full flex-col items-center gap-3 text-center">

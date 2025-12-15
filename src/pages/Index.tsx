@@ -126,9 +126,8 @@ const Index = () => {
           <div className="mx-auto flex max-w-6xl flex-col gap-12 px-6 sm:px-10 lg:px-12">
             <div
               ref={heroPanelRef}
+              className="relative overflow-hidden rounded-[3.75rem] border border-white/12 bg-white/5 backdrop-blur"
             >
-              <div className="liquid-glass-panel__shimmer" aria-hidden="true" />
-              <div className="liquid-glass-panel__rim" aria-hidden="true" />
               <div className="relative grid gap-12 px-8 pb-14 pt-14 sm:px-12 lg:px-16 lg:grid-cols-[minmax(0,1.05fr),minmax(0,0.95fr)]">
                 <div className="flex flex-col gap-10 text-center text-slate-100 lg:text-left">
                   <div className="space-y-5">

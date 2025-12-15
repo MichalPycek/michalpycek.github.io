@@ -126,16 +126,6 @@ const Index = () => {
           <div className="mx-auto flex max-w-6xl flex-col gap-12 px-6 sm:px-10 lg:px-12">
             <div
               ref={heroPanelRef}
-              className="liquid-glass-panel"
-              style={
-                {
-                  "--lg-highlight-x": "50%",
-                  "--lg-highlight-y": "50%",
-                  "--lg-rotation-x": "0deg",
-                  "--lg-rotation-y": "0deg",
-                  "--lg-glow-opacity": "0.24",
-                } as CSSProperties
-              }
             >
               <div className="liquid-glass-panel__shimmer" aria-hidden="true" />
               <div className="liquid-glass-panel__rim" aria-hidden="true" />

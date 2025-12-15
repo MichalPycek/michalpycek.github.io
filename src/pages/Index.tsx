@@ -117,7 +117,7 @@ const Index = () => {
         style={{ "--lg-layer-depth": "0.32" } as CSSProperties}
       />
 
-      <main className="relative z-10">
+      <main className="relative z-10 pb-14">
         <section
           ref={heroRef}
           className="pt-16"

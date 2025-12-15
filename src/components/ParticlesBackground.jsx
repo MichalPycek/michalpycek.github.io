@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 const MIN_PARTICLES = 36;
 const MAX_PARTICLES = 120;
 const PARTICLE_DENSITY = 0.00003;
+const FLASH_RADIUS = 260;
 
 const ParticlesBackground = () => {
   const canvasRef = useRef(null);
@@ -24,6 +25,12 @@ const ParticlesBackground = () => {
     ctx.imageSmoothingQuality = "high";
 
     const particles = [];
+
+    const pointer = {
+      x: 0,
+      y: 0,
+      active: false,
+    };
 
     const cloudPath = new Path2D(
       "M25.5 12.5c-.7-3.4-3.7-6-7.4-6-2.5 0-4.8 1.2-6.2 3.1-1-.7-2.2-1.1-3.4-1.1-3.3 0-6 2.7-6 6 0 .3 0 .7.1 1-2.1 1.1-3.6 3.2-3.6 5.7 0 3.5 2.9 6.4 6.4 6.4h19.2c3.5 0 6.4-2.9 6.4-6.4 0-3.1-2.1-5.6-4.8-6.3"
@@ -59,15 +66,19 @@ const ParticlesBackground = () => {
       return Math.max(MIN_PARTICLES, Math.min(MAX_PARTICLES, target));
     };
 
-    const createParticle = (width, height) => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      size: Math.random() * 0.5 + 0.4,
-      rotation: (Math.random() - 0.5) * 0.2,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.3,
-      opacity: 0.4 + Math.random() * 0.3,
-    });
+    const createParticle = (width, height) => {
+      const x = Math.random() * width;
+      const y = Math.random() * height;
+      return {
+        x,
+        y,
+        size: Math.random() * 0.5 + 0.4,
+        rotation: (Math.random() - 0.5) * 0.2,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35,
+        opacity: 0.4 + Math.random() * 0.3,
+      };
+    };
 
     const createParticles = (width, height, count) => {
       const newParticles = [];
@@ -165,6 +176,9 @@ const ParticlesBackground = () => {
         if (particle.y < -30) particle.y = layoutHeight + 30;
         if (particle.y > layoutHeight + 30) particle.y = -30;
 
+        // subtle rotation ties to motion
+        particle.rotation += (particle.vx + particle.vy) * 0.01;
+
         ctx.save();
         ctx.translate(particle.x, particle.y);
         ctx.rotate(particle.rotation);
@@ -173,6 +187,26 @@ const ParticlesBackground = () => {
         ctx.drawImage(cloudCanvas, -15, -15);
         ctx.restore();
       });
+
+      // flashlight glow over cursor
+      if (pointer.active) {
+        ctx.save();
+        ctx.globalCompositeOperation = "screen";
+        const glow = ctx.createRadialGradient(
+          pointer.x,
+          pointer.y,
+          0,
+          pointer.x,
+          pointer.y,
+          FLASH_RADIUS
+        );
+        glow.addColorStop(0, "rgba(120, 200, 255, 0.32)");
+        glow.addColorStop(0.35, "rgba(70, 160, 255, 0.18)");
+        glow.addColorStop(1, "rgba(0, 0, 0, 0)");
+        ctx.fillStyle = glow;
+        ctx.fillRect(0, 0, layoutWidth, layoutHeight);
+        ctx.restore();
+      }
 
       animationRef.current = requestAnimationFrame(animate);
     };
@@ -183,6 +217,21 @@ const ParticlesBackground = () => {
     const resizeListener = () => scheduleResize();
     window.addEventListener("resize", resizeListener, { passive: true });
     window.addEventListener("orientationchange", resizeListener);
+
+    const pointerMove = (event) => {
+      const rect = canvas.getBoundingClientRect();
+      pointer.x = event.clientX - rect.left;
+      pointer.y = event.clientY - rect.top;
+      pointer.active = true;
+    };
+
+    const pointerLeave = () => {
+      pointer.active = false;
+    };
+
+    window.addEventListener("pointermove", pointerMove, { passive: true });
+    window.addEventListener("pointerleave", pointerLeave, { passive: true });
+    window.addEventListener("pointercancel", pointerLeave, { passive: true });
 
     let resizeObserver;
     if (window.ResizeObserver) {
@@ -205,6 +254,9 @@ const ParticlesBackground = () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
+      window.removeEventListener("pointermove", pointerMove);
+      window.removeEventListener("pointerleave", pointerLeave);
+      window.removeEventListener("pointercancel", pointerLeave);
     };
   }, []);
 

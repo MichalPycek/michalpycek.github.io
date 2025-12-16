@@ -254,7 +254,6 @@ const Index = () => {
                             className="h-full w-full rounded-[3.25rem] object-cover object-[center_12%] opacity-95 [filter:saturate(1.05)_contrast(1.04)_brightness(1.02)]"
                             loading="eager"
                             decoding="async"
-                            fetchPriority="high"
                             sizes="(max-width: 640px) 224px, (max-width: 768px) 256px, (max-width: 1024px) 288px, (max-width: 1280px) 288px, 320px"
                           />
                         </picture>

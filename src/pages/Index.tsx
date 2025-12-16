@@ -1,5 +1,13 @@
-import { useEffect, useRef, type CSSProperties } from "react";
-import { ArrowUpRight, Linkedin, Mail, Globe, Github } from "lucide-react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
+import {
+  ArrowUpRight,
+  Linkedin,
+  Mail,
+  Globe,
+  Github,
+  MapPin,
+  Clock3,
+} from "lucide-react";
 import profileImageWebp from "@/assets/profile-image.webp";
 import profileImagePng from "@/assets/profile-image.png";
 import ParticlesBackground from "@/components/ParticlesBackground";
@@ -37,6 +45,7 @@ const contactLinks = [
 const Index = () => {
   const heroRef = useRef<HTMLElement>(null);
   const heroPanelRef = useRef<HTMLDivElement>(null);
+  const [localTime, setLocalTime] = useState("");
 
   useEffect(() => {
     if (heroRef.current) {
@@ -98,6 +107,29 @@ const Index = () => {
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    const updateTime = () => {
+      try {
+        const formatted = new Intl.DateTimeFormat("en-GB", {
+          hour: "2-digit",
+          minute: "2-digit",
+          timeZone: "Europe/Warsaw",
+        }).format(new Date());
+        setLocalTime(formatted);
+      } catch (error) {
+        if (import.meta.env.DEV) {
+          console.warn("Failed to compute local time", error);
+        }
+      }
+    };
+
+    updateTime();
+    const id = window.setInterval(updateTime, 30000);
+    return () => {
+      window.clearInterval(id);
     };
   }, []);
 
@@ -251,6 +283,25 @@ const Index = () => {
                             </span>
                           </a>
                         ))}
+                      </div>
+                      <div className="flex w-full flex-wrap items-center justify-center gap-1.5 rounded-[999px] border border-white/14 bg-white/10 px-3.5 py-2.5 text-xs text-white/80 shadow-[0_8px_30px_rgba(0,0,0,0.32)] backdrop-blur-md sm:gap-2 sm:px-4 sm:py-3 sm:text-[13px] md:flex-nowrap">
+                        <span className="flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1.5 text-white/80 whitespace-nowrap sm:px-3">
+                          <span className="flex h-[10px] w-[10px] items-center justify-center">
+                            <span className="h-[6px] w-[6px] rounded-full bg-emerald-300/85 shadow-[0_0_0_6px_rgba(16,185,129,0.08)]" />
+                          </span>
+                          <MapPin className="h-[15px] w-[15px] text-white/80" aria-hidden="true" />
+                          <span className="font-medium text-white">Warsaw</span>
+                        </span>
+                        <span className="flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1.5 text-white/80 whitespace-nowrap sm:px-3">
+                          <Clock3 className="h-[14px] w-[14px] text-white/80" aria-hidden="true" />
+                          <span className="font-medium text-white">CET/CEST</span>
+                        </span>
+                        <span className="flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1.5 text-white/80 whitespace-nowrap sm:px-3">
+                          <span className="h-1.5 w-1.5 rounded-full bg-sky-300/90 shadow-[0_0_0_6px_rgba(125,211,252,0.08)]" />
+                          <span className="font-semibold text-white">
+                            Time: {localTime || "--:--"}
+                          </span>
+                        </span>
                       </div>
                     </div>
                   </div>

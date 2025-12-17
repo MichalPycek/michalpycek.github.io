@@ -132,7 +132,9 @@ const ParticlesBackground = () => {
     const getCanvasDimensions = () => {
       const parent = canvas.parentElement;
       const width =
-        parent?.clientWidth ?? document.documentElement.clientWidth ?? window.innerWidth;
+        parent?.clientWidth ??
+        document.documentElement.clientWidth ??
+        window.innerWidth;
       const height = Math.max(
         parent?.scrollHeight ?? 0,
         parent?.clientHeight ?? 0,
@@ -227,7 +229,14 @@ const ParticlesBackground = () => {
           const ry = puff.size * 0.4 * scale;
           const rotation = puff.angle + eased * puff.wobble;
 
-          const gradient = ctx.createRadialGradient(px, py, 1, px, py, rx * 1.3);
+          const gradient = ctx.createRadialGradient(
+            px,
+            py,
+            1,
+            px,
+            py,
+            rx * 1.3
+          );
           gradient.addColorStop(0, `rgba(255, 255, 255, ${0.28 * fade})`);
           gradient.addColorStop(1, `rgba(0, 161, 224, ${0.12 * fade})`);
 

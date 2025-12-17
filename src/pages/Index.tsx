@@ -9,7 +9,10 @@ import {
   Clock3,
 } from "lucide-react";
 import profileImageWebp from "@/assets/profile-image.webp";
-import profileImagePng from "@/assets/profile-image.png";
+import profileImageWebp320 from "@/assets/profile-image-320.webp";
+import profileImageWebp480 from "@/assets/profile-image-480.webp";
+import profileImageWebp640 from "@/assets/profile-image-640.webp";
+import profileImagePng from "@/assets/profile-image-800.png";
 import ParticlesBackground from "@/components/ParticlesBackground";
 import AspectRatio from "@/components/AspectRatio";
 
@@ -183,7 +186,7 @@ const Index = () => {
                       href="https://calendar.app.google/PnDkzsEt1s1MHmn2A"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-primary transition hover:translate-y-[-1px]"
+                      className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-[#0a1f4d] transition hover:translate-y-[-1px]"
                     >
                       Schedule a call
                     </a>
@@ -247,13 +250,21 @@ const Index = () => {
                       />
                       <AspectRatio ratio={4 / 5}>
                         <picture>
-                          <source srcSet={profileImageWebp} type="image/webp" />
+                          <source
+                            srcSet={`${profileImageWebp320} 320w, ${profileImageWebp480} 480w, ${profileImageWebp640} 640w, ${profileImageWebp} 800w`}
+                            type="image/webp"
+                            sizes="(max-width: 640px) 224px, (max-width: 768px) 256px, (max-width: 1024px) 288px, (max-width: 1280px) 288px, 320px"
+                          />
                           <img
                             src={profileImagePng}
+                            srcSet={`${profileImagePng} 800w`}
                             alt="Michał Pycek, Salesforce Architect"
                             className="h-full w-full rounded-[3.25rem] object-cover object-[center_12%] opacity-95 [filter:saturate(1.05)_contrast(1.04)_brightness(1.02)]"
                             loading="eager"
                             decoding="async"
+                            fetchpriority="high"
+                            width={640}
+                            height={800}
                             sizes="(max-width: 640px) 224px, (max-width: 768px) 256px, (max-width: 1024px) 288px, (max-width: 1280px) 288px, 320px"
                           />
                         </picture>

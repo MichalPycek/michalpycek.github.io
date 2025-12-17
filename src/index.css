@@ -116,79 +116,6 @@ All colors MUST be HSL.
     transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  .liquid-glass-panel {
-    position: relative;
-    overflow: hidden;
-    border-radius: 3.75rem;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 45px 150px -68px rgba(15, 15, 22, var(--lg-glow-opacity, 0.22));
-    backdrop-filter: blur(2px);
-    --lg-highlight-x: 50%;
-    --lg-highlight-y: 50%;
-    --lg-rotation-x: 0deg;
-    --lg-rotation-y: 0deg;
-    --lg-glow-opacity: 0.26;
-    transform: perspective(1600px) rotateX(var(--lg-rotation-x))
-      rotateY(var(--lg-rotation-y))
-      translate3d(0, calc(var(--lg-parallax-value, 0px) * 0.12), 0);
-    transition: transform 200ms ease, box-shadow 240ms ease;
-    will-change: transform;
-  }
-
-  .liquid-glass-panel::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: radial-gradient(
-        circle at var(--lg-highlight-x) var(--lg-highlight-y),
-        rgba(255, 255, 255, 0.62),
-        rgba(255, 255, 255, 0.08) 40%,
-        transparent 70%
-      ),
-      radial-gradient(
-        115% 140% at 80% -10%,
-        rgba(255, 255, 255, 0.18),
-        transparent 60%
-      );
-    mix-blend-mode: screen;
-    pointer-events: none;
-    opacity: 0.7;
-  }
-
-  .liquid-glass-panel::after {
-    content: "";
-    position: absolute;
-    left: 15%;
-    right: 15%;
-    top: 0;
-    height: 18%;
-    border-radius: 0 0 2.75rem 2.75rem;
-    pointer-events: none;
-    opacity: 0.6;
-  }
-
-  .liquid-glass-panel__shimmer {
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    mix-blend-mode: screen;
-    filter: saturate(1.08);
-    pointer-events: none;
-  }
-
-  .liquid-glass-panel__rim {
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08),
-      inset 0 1px 12px rgba(255, 255, 255, 0.12);
-    mix-blend-mode: screen;
-    opacity: 0.48;
-    pointer-events: none;
-  }
-
   .liquid-glass-slab {
     position: relative;
     overflow: hidden;
@@ -427,32 +354,6 @@ All colors MUST be HSL.
     outline: none;
   }
 
-  .liquid-info-dot {
-    height: 9px;
-    width: 9px;
-    border-radius: 999px;
-    background: transparent;
-    box-shadow: none;
-    flex-shrink: 0;
-  }
-
-  .liquid-info-dot--pulse {
-    position: relative;
-  }
-
-  .liquid-info-dot--pulse::after {
-    content: "";
-    position: absolute;
-    inset: -6px;
-    border-radius: inherit;
-    background: radial-gradient(
-      circle,
-      rgba(255, 255, 255, 0.26),
-      rgba(255, 255, 255, 0)
-    );
-    opacity: 0.7;
-  }
-
   .liquid-info-icon {
     height: 16px;
     width: 16px;
@@ -567,8 +468,7 @@ All colors MUST be HSL.
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .liquid-glass-layer,
-    .liquid-glass-panel {
+    .liquid-glass-layer {
       transition: none;
       transform: none !important;
     }

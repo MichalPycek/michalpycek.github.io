@@ -163,7 +163,7 @@ const Index = () => {
               ref={heroPanelRef}
               className="relative overflow-hidden rounded-[3.75rem] border border-white/12 bg-white/5 backdrop-blur"
             >
-              <div className="relative grid gap-12 px-8 pb-14 pt-14 sm:px-12 lg:px-16 lg:grid-cols-[minmax(0,1.05fr),minmax(0,0.95fr)]">
+              <div className="relative grid gap-12 px-8 pb-14 pt-14 sm:px-12 lg:px-16 lg:grid-cols-[minmax(0,1.05fr),minmax(0,0.95fr)] lg:items-start">
                 <div className="flex flex-col gap-10 text-center text-slate-100 lg:text-left">
                   <div className="space-y-5">
                     <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.35em] text-sky-100/90">
@@ -224,7 +224,7 @@ const Index = () => {
                   </div>
                 </div>
 
-                <div className="relative flex justify-center">
+                <div className="relative flex justify-center lg:-mt-3">
                   <div className="relative flex w-full max-w-md flex-col items-center gap-7">
                     <div className="liquid-glass-orb" aria-hidden="true" />
                     <div
@@ -274,7 +274,7 @@ const Index = () => {
                       <p className="text-sm uppercase tracking-[0.25em] text-white/55">
                         Let's connect
                       </p>
-                      <div className="liquid-glass-contact">
+                      <div className="liquid-glass-contact w-full">
                         {contactLinks.map((link, index) => (
                           <a
                             key={index}
@@ -294,24 +294,22 @@ const Index = () => {
                           </a>
                         ))}
                       </div>
-                      <div className="flex w-full flex-wrap items-center justify-center gap-1.5 rounded-[999px] border border-white/14 bg-white/10 px-3.5 py-2.5 text-xs text-white/80 shadow-[0_8px_30px_rgba(0,0,0,0.32)] backdrop-blur-md sm:gap-2 sm:px-4 sm:py-3 sm:text-[13px] md:flex-nowrap">
-                        <span className="flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1.5 text-white/80 whitespace-nowrap sm:px-3">
-                          <span className="flex h-[10px] w-[10px] items-center justify-center">
-                            <span className="h-[6px] w-[6px] rounded-full bg-emerald-300/85 shadow-[0_0_0_6px_rgba(16,185,129,0.08)]" />
-                          </span>
-                          <MapPin className="h-[15px] w-[15px] text-white/80" aria-hidden="true" />
-                          <span className="font-medium text-white">Warsaw</span>
-                        </span>
-                        <span className="flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1.5 text-white/80 whitespace-nowrap sm:px-3">
-                          <Clock3 className="h-[14px] w-[14px] text-white/80" aria-hidden="true" />
-                          <span className="font-medium text-white">CET/CEST</span>
-                        </span>
-                        <span className="flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1.5 text-white/80 whitespace-nowrap sm:px-3">
-                          <span className="h-1.5 w-1.5 rounded-full bg-sky-300/90 shadow-[0_0_0_6px_rgba(125,211,252,0.08)]" />
-                          <span className="font-semibold text-white">
-                            Time: {localTime || "--:--"}
-                          </span>
-                        </span>
+                      <div className="liquid-glass-contact liquid-glass-contact--info w-full">
+                        {[
+                          {
+                            label: "Warsaw",
+                            icon: MapPin,
+                          },
+                          {
+                            label: `CET/CEST · ${localTime || "--:--"}`,
+                            icon: Clock3,
+                          },
+                        ].map((chip, index) => (
+                          <div className="liquid-info-chip" key={chip.label + index}>
+                            <chip.icon className="liquid-info-icon" aria-hidden="true" />
+                            <span className="font-semibold text-white">{chip.label}</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>

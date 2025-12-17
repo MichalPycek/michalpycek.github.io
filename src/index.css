@@ -385,6 +385,107 @@ All colors MUST be HSL.
     will-change: transform;
   }
 
+  .liquid-glass-contact--info {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    gap: 0.5rem;
+    background: linear-gradient(
+      130deg,
+      rgba(8, 18, 40, 0.46),
+      rgba(8, 16, 34, 0.26)
+    );
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 18px 50px -48px rgba(12, 22, 46, 0.6);
+  }
+
+  .liquid-info-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.46rem 0.95rem;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 14px 32px -28px rgba(28, 68, 130, 0.8);
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 0.82rem;
+    line-height: 1.05;
+    min-height: 2.45rem;
+    white-space: nowrap;
+    transition: transform 180ms ease, border-color 180ms ease,
+      box-shadow 260ms ease;
+  }
+
+  .liquid-info-chip:hover,
+  .liquid-info-chip:focus-visible {
+    transform: translateY(-1px);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 10px 32px -22px rgba(70, 150, 255, 0.85);
+    outline: none;
+  }
+
+  .liquid-info-dot {
+    height: 9px;
+    width: 9px;
+    border-radius: 999px;
+    background: transparent;
+    box-shadow: none;
+    flex-shrink: 0;
+  }
+
+  .liquid-info-dot--pulse {
+    position: relative;
+  }
+
+  .liquid-info-dot--pulse::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border-radius: inherit;
+    background: radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.26),
+      rgba(255, 255, 255, 0)
+    );
+    opacity: 0.7;
+  }
+
+  .liquid-info-icon {
+    height: 16px;
+    width: 16px;
+    color: rgba(255, 255, 255, 0.92);
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 768px) {
+    .liquid-glass-contact--info {
+      flex-wrap: nowrap;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .liquid-glass-contact--info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      padding: 0.35rem 0.35rem;
+      gap: 0.35rem;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+    }
+
+    .liquid-info-chip {
+      width: 100%;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.08);
+      min-height: 2.2rem;
+      padding: 0.4rem 0.75rem;
+    }
+  }
+
   .liquid-icon-button {
     position: relative;
     display: inline-flex;

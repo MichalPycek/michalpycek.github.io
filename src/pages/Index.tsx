@@ -183,7 +183,7 @@ const Index = () => {
                       href="https://calendar.app.google/PnDkzsEt1s1MHmn2A"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-primary transition hover:translate-y-[-1px]"
+                      className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition hover:translate-y-[-1px]"
                     >
                       Schedule a call
                     </a>
@@ -251,6 +251,8 @@ const Index = () => {
                           <img
                             src={profileImagePng}
                             alt="Michał Pycek, Salesforce Architect"
+                            width={1993}
+                            height={1993}
                             className="h-full w-full rounded-[3.25rem] object-cover object-[center_12%] opacity-95 [filter:saturate(1.05)_contrast(1.04)_brightness(1.02)]"
                             loading="eager"
                             decoding="async"

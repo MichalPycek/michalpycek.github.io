@@ -359,7 +359,11 @@ const ParticlesBackground = () => {
     <canvas
       ref={canvasRef}
       className="pointer-events-auto absolute inset-0 z-0"
-      style={{ backgroundColor: "transparent" }}
+      style={{
+        backgroundColor: "transparent",
+        contain: "paint",
+        willChange: "transform",
+      }}
     />
   );
 };

@@ -45,10 +45,54 @@ const contactLinks = [
   },
 ];
 
+const getWarsawTimeZoneAbbreviation = (date: Date) => {
+  const timeZone = "Europe/Warsaw";
+
+  try {
+    const direct = new Intl.DateTimeFormat("en-GB", {
+      timeZone,
+      timeZoneName: "short",
+    })
+      .formatToParts(date)
+      .find((part) => part.type === "timeZoneName")?.value;
+
+    if (direct === "CET" || direct === "CEST") {
+      return direct;
+    }
+  } catch {}
+
+  const parseOffsetMinutes = (value: string | undefined) => {
+    if (!value) return null;
+    const match = value.match(/^(?:GMT|UTC)([+-])(\d{1,2})(?::?(\d{2}))?$/);
+    if (!match) return null;
+    const sign = match[1] === "-" ? -1 : 1;
+    const hours = Number(match[2]);
+    const minutes = match[3] ? Number(match[3]) : 0;
+    if (Number.isNaN(hours) || Number.isNaN(minutes)) return null;
+    return sign * (hours * 60 + minutes);
+  };
+
+  try {
+    const offsetLabel = new Intl.DateTimeFormat("en-GB", {
+      timeZone,
+      timeZoneName: "shortOffset",
+    })
+      .formatToParts(date)
+      .find((part) => part.type === "timeZoneName")?.value;
+
+    const offsetMinutes = parseOffsetMinutes(offsetLabel);
+    if (offsetMinutes === 60) return "CET";
+    if (offsetMinutes === 120) return "CEST";
+  } catch {}
+
+  return "CET/CEST";
+};
+
 const Index = () => {
   const heroRef = useRef<HTMLElement>(null);
   const heroPanelRef = useRef<HTMLDivElement>(null);
   const [localTime, setLocalTime] = useState("");
+  const [localTimeZone, setLocalTimeZone] = useState("CET/CEST");
 
   useEffect(() => {
     if (heroRef.current) {
@@ -116,12 +160,14 @@ const Index = () => {
   useEffect(() => {
     const updateTime = () => {
       try {
+        const now = new Date();
         const formatted = new Intl.DateTimeFormat("en-GB", {
           hour: "2-digit",
           minute: "2-digit",
           timeZone: "Europe/Warsaw",
-        }).format(new Date());
+        }).format(now);
         setLocalTime(formatted);
+        setLocalTimeZone(getWarsawTimeZoneAbbreviation(now));
       } catch (error) {
         if (import.meta.env.DEV) {
           console.warn("Failed to compute local time", error);
@@ -301,7 +347,7 @@ const Index = () => {
                             icon: MapPin,
                           },
                           {
-                            label: `CET/CEST · ${localTime || "--:--"}`,
+                            label: `${localTimeZone} · ${localTime || "--:--"}`,
                             icon: Clock3,
                           },
                         ].map((chip, index) => (
